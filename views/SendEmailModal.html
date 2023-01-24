@@ -1,0 +1,40 @@
+<script src="lib/jquery/jquery.min.js"></script>
+<script  type="text/javascript">
+
+$(function(){
+	$('#inputMessage').on('input', function() {
+      checkReasonBox();
+    });
+    function checkReasonBox(){
+    	document.getElementById("chkReason").click();
+    }
+});
+
+
+</script>
+
+<div class="modal-header">
+	<button type="button" class="close" ng-click="AppCtrl.closeModalWindow()">&times;</button>
+	<h4 class="modal-title">{{::languageConstants.get('Deny Request')}}</h4>
+</div>
+
+<div class="modal-body">
+ <div class="row">
+   <form name="emailForm" class="form-horizontal"  novalidate>
+    <div class="form-group">
+     <label class="col-sm-2 control-label">Reason</label>
+     <div class="col-sm-10">
+      <textarea ng-model="interfaceItem.denymessage" class="form-control" id="inputMessage" name="inputMessage" placeholder="Your message..." style="margin: 0px 8.33984px 0px 0px; width: 484px; height: 78px;"></textarea>
+     </div>
+    </div>
+    <div class="form-group">
+     <div class="col-sm-offset-2 col-sm-10">
+     <button type="button" class="h5Button {{theme.button}}" ng-click="AppCtrl.closeModalWindow()">Cancel</button>
+     <button type="button" class="h5Button {{theme.button}}" ng-click="AppCtrl.denySelectedLine()" ng-disabled="!interfaceItem.enableReasonbutton">Confirm</button>
+     <button class="h5Button {{theme.button}}" ng-click="AppCtrl.enableConfirm()" id="chkReason" hidden >{{::languageConstants.get('chkreason')}}</button>  
+					
+     </div>
+    </div>
+   </form>
+  </div>
+ </div>

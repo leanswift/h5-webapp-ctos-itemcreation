@@ -1,0 +1,18 @@
+<div class="ui-grid-footer-info ui-grid-grid-footer ui-grid-footer-cell-wrapper h5-padding-md">
+	      <span>{{grid.appScope.languageConstants.get('TotalItems') +': '+ grid.rows.length}}</span> <span
+		ng-if="grid.renderContainers.body.visibleRowCache.length !== grid.rows.length" class="ngLabel"> ({{grid.appScope.languageConstants.get('FilteredItems')
+		+': '+grid.renderContainers.body.visibleRowCache.length}}) </span>
+   
+   <div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12">
+					<div class="pager h5-margin-auto">
+						<ul>
+							<li><button class="h5Button {{grid.appScope.theme.button}}" ng-click="grid.appScope.interfaceItem.Assign()">{{::grid.appScope.languageConstants.get('Assign')}}</button></li>
+						<li><button class="h5Button {{grid.appScope.theme.button}}" ng-click="grid.appScope.interfaceItem.unAssign()">{{::grid.appScope.languageConstants.get('UnAssign')}}</button></li>
+						<li><button class="h5Button {{grid.appScope.theme.button}}" ng-click="grid.appScope.interfaceItem.removeSelectedLine()"   ng-disabled="!grid.appScope.interfaceItem.enableDenybutton">{{::grid.appScope.languageConstants.get('Deny Request')}}</button></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+   
+</div>
