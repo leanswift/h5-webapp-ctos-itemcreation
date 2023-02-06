@@ -2015,6 +2015,20 @@ module h5.application {
            let OVH1: any;
            let OVH2: any; 
            let CFI5: any;  
+
+           let MMGRWE: any;
+           let MMNEWE: any;
+           let MMVOLR: any;
+           let MMDIM1: any;
+           let MMDIM2: any;
+           let MMDIM3: any;
+           let MMSPE1: any;
+           let MMSPE2: any;
+           let MMSPE3: any;
+
+           let VOLDIM1: any;
+           let VOLDIM2: any;
+           let VOLDIM3: any;
             
             this.scope.interfaceItem.enablebutton = false;
             let itemExists: boolean;
@@ -2068,7 +2082,20 @@ module h5.application {
             OVH1 = this.scope.interfaceItem.userInput.OVH1;
             OVH2 = this.scope.interfaceItem.userInput.OVH2;
             }
-            let date = new Date();
+           MMGRWE = this.scope.interfaceItem.userInput.MMGRWE;
+           MMNEWE = this.scope.interfaceItem.userInput.MMNEWE;
+           //MMVOLR = this.scope.interfaceItem.userInput.MMVOLR;
+           MMDIM1 = this.scope.interfaceItem.userInput.MMDIM1;
+           MMDIM2 = this.scope.interfaceItem.userInput.MMDIM2;
+           MMDIM3 = this.scope.interfaceItem.userInput.MMDIM3;
+           VOLDIM1 = this.scope.interfaceItem.userInput.MMDIM1;
+           VOLDIM2 = this.scope.interfaceItem.userInput.MMDIM2;
+           VOLDIM3 = this.scope.interfaceItem.userInput.MMDIM3;
+           
+           MMSPE1 = this.scope.interfaceItem.userInput.MMSPE1;
+           MMSPE2 = this.scope.interfaceItem.userInput.MMSPE2;
+           MMSPE3 = this.scope.interfaceItem.userInput.MMSPE3;
+         let date = new Date();
             date.setMonth(date.getMonth());
             let fromDate = this.$filter('date')(date, "yyyyMMdd");
             //console.log("G ITGR" +ITGR);
@@ -2103,6 +2130,13 @@ module h5.application {
             if(BUYE == undefined){
                  BUYE = "";
              }
+            if(MMGRWE === undefined || MMGRWE === null){MMGRWE = "";}if(MMNEWE === undefined || MMNEWE === null){MMNEWE = "";}
+            if(MMDIM1 === undefined ||  MMDIM1 === "" ||  MMDIM1 === null){MMDIM1 = ""; VOLDIM1 = "0";}if(MMDIM2 == undefined  ||  MMDIM2 === "" ||  MMDIM2 === null){MMDIM2 = "";  VOLDIM2 = "0";}if(MMDIM3 == undefined ||  MMDIM3 === "" ||  MMDIM3 === null){MMDIM3 = "";  VOLDIM3 = "0";}
+            if(MMSPE1 === undefined || MMSPE1 === null){MMSPE1 = "";}if(MMSPE2 === undefined || MMSPE2 === null){MMSPE2 = "";}if(MMSPE3 === undefined || MMSPE3 === null){MMSPE3 = "";}
+            
+            MMVOLR = parseFloat(VOLDIM1) * parseFloat(VOLDIM2) * parseFloat(VOLDIM3) ;
+            console.log("G MMVOLR---"+MMVOLR);  
+           // MMGRWE,MMNEWE,MMVOLR , MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3
             
 //             if (ITGR == undefined || angular.equals("", ITGR)) {
 //                 ITGR = "UA";
@@ -2128,7 +2162,7 @@ module h5.application {
                      }else{
                         CFI5 = "";   
                      }
-                    this.appService.UpdItmBasic(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmBasic(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR).then((valUpdItmBasic: M3.IMIResponse) => {
                     this.scope.interfaceItem.finalITNO = valM3Item.item.ITNO;
                     //console.log("G FINAL ITNO---"+ this.scope.interfaceItem.finalITNO); 
                     //console.log("G FINAL valM3Item.item.CHNO---"+ valM3Item.item.CHNO); 
@@ -2241,12 +2275,18 @@ module h5.application {
                  }); */
                              
                 this.appService.UpdItmPriceDetails(userContext.company,valM3Item.item.ITNO,SUNO).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmMeas(userContext.company,valM3Item.item.ITNO,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3).then((valUpdItmMeas: M3.IMIResponse) => {
+                    }, (err: M3.IMIResponse) => {
+                    this.showError("Error occurred during Item Measure fields update(MMS200MI - UpdItmMeas),", [err.errorMessage]);
+                   }); 
                  }, (err: M3.IMIResponse) => {
                this.showError("Error occurred during Item price fields update(Supplier),", [err.errorMessage]);
-               
+               this.appService.UpdItmMeas(userContext.company,valM3Item.item.ITNO,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3).then((valUpdItmMeas: M3.IMIResponse) => {
+                        }, (err: M3.IMIResponse) => {
+                        this.showError("Error occurred during Item Measure fields update(MMS200MI - UpdItmMeas),", [err.errorMessage]);
+                    }); 
                  });  
-                             
-                this.$q.all(promises).then((results: [M3.IMIResponse]) => {
+this.$q.all(promises).then((results: [M3.IMIResponse]) => {
                 
                 //this.processAllOperation(valM3Item.item.ITNO,itemExists);
                     //console.log("G ALL PROCESS FINISHED");
@@ -2307,7 +2347,7 @@ module h5.application {
                 this.refreshTransactionStatus();
                 //this.showError("Error occurred during Item basic fields update(MMS001)", [err.errorMessage]);
                 this.reprocessItem(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,
-                itemExists,ITTY,OVH1,OVH2,fromDate,SUNO,AGNB,GRPI,FVDT,PUPR,BUYE,valM3Item.item.CHNO);
+                itemExists,ITTY,OVH1,OVH2,fromDate,SUNO,AGNB,GRPI,FVDT,PUPR,BUYE,valM3Item.item.CHNO,MMGRWE,MMNEWE,MMVOLR,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3);
                });
                     }, (err: M3.IMIResponse)=> {
                 itemExists = false;
@@ -2321,7 +2361,7 @@ module h5.application {
         }
         
         private reprocessItem(company:string ,STAT: any,ITNO: any,RESP: any,UNMS: any,ITGR: any,BUAR: any,ITCL: any,ATMO: any,FUDS: any,
-        itemExists:boolean,ITTY: any,OVH1: any,OVH2: any,fromDate: any,SUNO: any,AGNB: any,GRPI: any,FVDT: any,PUPR: any,BUYE: any,CHNO: any) {
+        itemExists:boolean,ITTY: any,OVH1: any,OVH2: any,fromDate: any,SUNO: any,AGNB: any,GRPI: any,FVDT: any,PUPR: any,BUYE: any,CHNO: any,MMGRWE: any,MMNEWE: any,MMVOLR: any, MMDIM1: any,MMDIM2: any,MMDIM3: any,MMSPE1: any,MMSPE2: any,MMSPE3: any) {
                 this.scope.loadingData = true;
                 this.scope.interfaceItem.transactionStatus.createItems = true;
             let promises = [];
@@ -2333,7 +2373,7 @@ module h5.application {
                      }else{
                         CFI5 = "";   
                      }
-                    this.appService.UpdItmBasic(company,STAT,ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmBasic(company,STAT,ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR).then((valUpdItmBasic: M3.IMIResponse) => {
                     this.scope.interfaceItem.finalITNO = ITNO;
                     this.processAllOperation(ITNO,itemExists);
                     if (angular.equals("401", ITTY) ) {
@@ -2438,8 +2478,16 @@ module h5.application {
                  });*/
                              
                  this.appService.UpdItmPriceDetails(userContext.company,valM3Item.item.ITNO,SUNO).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmMeas(userContext.company,valM3Item.item.ITNO,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3).then((valUpdItmMeas: M3.IMIResponse) => {
+                    }, (err: M3.IMIResponse) => {
+                    this.showError("Error occurred during Item Measure fields update(MMS200MI - UpdItmMeas),", [err.errorMessage]);
+                   }); 
                  }, (err: M3.IMIResponse) => {
                this.showError("Error occurred during Item price fields update(Supplier),", [err.errorMessage]);
+               this.appService.UpdItmMeas(userContext.company,valM3Item.item.ITNO,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3).then((valUpdItmMeas: M3.IMIResponse) => {
+                    }, (err: M3.IMIResponse) => { 
+                    this.showError("Error occurred during Item Measure fields update(MMS200MI - UpdItmMeas),", [err.errorMessage]);
+                }); 
                
                  });
                 this.$q.all(promises).then((results: [M3.IMIResponse]) => {
@@ -2662,7 +2710,17 @@ module h5.application {
             this.scope.interfaceItem.userInput.OVH2 = "";
             this.scope.interfaceItem.userInput.PRRF = { selected: ""};
             this.scope.interfaceItem.agreementList = [];
-            this.scope.interfaceItem.userInput.DCCD = ""
+            this.scope.interfaceItem.userInput.DCCD = "";
+
+            this.scope.interfaceItem.userInput.MMGRWE = "";
+            this.scope.interfaceItem.userInput.MMNEWE = "";
+            this.scope.interfaceItem.userInput.MMVOLR = "";
+            this.scope.interfaceItem.userInput.MMDIM1 = "";
+            this.scope.interfaceItem.userInput.MMDIM2 = "";
+            this.scope.interfaceItem.userInput.MMDIM3 = "";
+            this.scope.interfaceItem.userInput.MMSPE1 = "";
+            this.scope.interfaceItem.userInput.MMSPE2 = "";
+            this.scope.interfaceItem.userInput.MMSPE3 = "";
             this.removeSpecialChars();
             }
         
@@ -2700,7 +2758,17 @@ module h5.application {
             this.scope.interfaceItem.userInput.PRRF = { selected: ""};
             this.scope.interfaceItem.itemlinesGrid.gridApi.selection.clearSelectedRows();
              this.scope.interfaceItem.agreementList = [];
-             this.scope.interfaceItem.userInput.DCCD = ""
+             this.scope.interfaceItem.userInput.DCCD = "";
+
+            this.scope.interfaceItem.userInput.MMGRWE = "";
+            this.scope.interfaceItem.userInput.MMNEWE = "";
+            this.scope.interfaceItem.userInput.MMVOLR = "";
+            this.scope.interfaceItem.userInput.MMDIM1 = "";
+            this.scope.interfaceItem.userInput.MMDIM2 = "";
+            this.scope.interfaceItem.userInput.MMDIM3 = "";
+            this.scope.interfaceItem.userInput.MMSPE1 = "";
+            this.scope.interfaceItem.userInput.MMSPE2 = "";
+            this.scope.interfaceItem.userInput.MMSPE3 = "";
             this.removeSpecialChars();
             }
         

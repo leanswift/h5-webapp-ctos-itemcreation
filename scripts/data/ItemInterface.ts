@@ -60,6 +60,15 @@ module h5.application {
             UNMU?: any;
             DCCD?: string;
            
+            MMGRWE?: any;
+            MMNEWE?: any;
+            MMVOLR?: any;
+            MMDIM1?: any;
+            MMDIM2?: any;
+            MMDIM3?: any;
+            MMSPE1?: any;
+            MMSPE2?: any;
+            MMSPE3?: any; 
             
         };
         userInput1: {

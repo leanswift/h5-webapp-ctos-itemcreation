@@ -39,7 +39,7 @@ module h5.application {
         processM3Item(CONO: string,ITNO: string,ITTY: string, ITDS: string,ITNE: string): ng.IPromise<M3.IMIResponse>;
         getItmBasic(CONO: string,ITNO: string): ng.IPromise<M3.IMIResponse>;
         getItmRefreshCHNO(ITNO: string): ng.IPromise<M3.IMIResponse>;
-        UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string): ng.IPromise<M3.IMIResponse>;
+        UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any): ng.IPromise<M3.IMIResponse>;
         UpdItmBasicDetails(CONO: string,ITNO: string, ATMO: string,DCCD: string): ng.IPromise<M3.IMIResponse>;
         UpdItmPriceDetails(CONO: string,ITNO: string, SUNO: string): ng.IPromise<M3.IMIResponse>;
         UpdItmWhs(CONO: string,WHLO: string,ITNO: string,STAT:string,SUNO: string,BUYE: string): ng.IPromise<M3.IMIResponse>;
@@ -75,6 +75,8 @@ module h5.application {
         deleteItemRequest(FILE: string,ITNO: string): ng.IPromise<M3.IMIResponse>;
         denyItemRequest(FILE: string,ITNO: string,REAS: string): ng.IPromise<M3.IMIResponse>;
         getplanningPolicy(PLCD: string): ng.IPromise<M3.IMIResponse>;
+
+        UpdItmMeas(CONO: string,ITNO: string, MMDIM1: string,MMDIM2: string,MMDIM3: string, MMSPE1: string,MMSPE2: string,MMSPE3: string): ng.IPromise<M3.IMIResponse>;
     }
 
     export class AppService implements IAppService {
@@ -324,7 +326,7 @@ module h5.application {
             return this.restService.executeM3MIRestService("MMS200MI", "AddItmViaItmTyp", requestData).then((val: M3.IMIResponse) => { return val; });
         }
         
-         public UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string): ng.IPromise<M3.IMIResponse>{
+         public UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any): ng.IPromise<M3.IMIResponse>{
             let requestData = {
                 CONO: CONO,
                 STAT: STAT,
@@ -339,7 +341,10 @@ module h5.application {
                 CHNO: CHNO,
                 CFI2: PUPR.toFixed(2),
                 CFI5: CFI5,
-                DCCD: DCCD
+                DCCD: DCCD,
+                GRWE: MMGRWE.toFixed(3),
+                NEWE: MMNEWE.toFixed(3),
+                VOL3: MMVOLR.toFixed(3) 
             };
             return this.restService.executeM3MIRestService("MMS200MI", "UpdItmBasic", requestData).then((val: M3.IMIResponse) => { return val; });
         }
@@ -380,7 +385,24 @@ module h5.application {
             };
             return this.restService.executeM3MIRestService("MMS200MI", "UpdItmPrice", requestData).then((val: M3.IMIResponse) => { return val; });
         }
-        
+
+        public UpdItmMeas(CONO: string,ITNO: string, MMDIM1: string,MMDIM2: string,MMDIM3: string, MMSPE1: string,MMSPE2: string,MMSPE3: string): ng.IPromise<M3.IMIResponse>{
+            let requestData = {
+                CONO: CONO,
+                ITNO: ITNO,
+                DIM1: MMDIM1,
+                DIM2: MMDIM2,
+                DIM3: MMDIM3,
+                SPE1: MMSPE1,
+                SPE2: MMSPE2,
+                SPE3: MMSPE3 
+            };
+            return this.restService.executeM3MIRestService("MMS200MI", "UpdItmMeas", requestData).then((val: M3.IMIResponse) => { return val; });
+        }
+
+
+
+
          public UpdItmWhs(CONO: string,WHLO: string,ITNO: string,STAT: string,SUNO: string,BUYE: string): ng.IPromise<M3.IMIResponse>{
              let requestData :any;
              if(SUNO != undefined && !angular.equals("", SUNO))
