@@ -2130,7 +2130,7 @@ module h5.application {
             if(BUYE == undefined){
                  BUYE = "";
              }
-            if(MMGRWE === undefined || MMGRWE === null){MMGRWE = "";}if(MMNEWE === undefined || MMNEWE === null){MMNEWE = "";}
+            if(MMGRWE === undefined || MMGRWE === null){MMGRWE = 0;}if(MMNEWE === undefined || MMNEWE === null){MMNEWE = 0;}
             if(MMDIM1 === undefined ||  MMDIM1 === "" ||  MMDIM1 === null){MMDIM1 = ""; VOLDIM1 = "0";}if(MMDIM2 == undefined  ||  MMDIM2 === "" ||  MMDIM2 === null){MMDIM2 = "";  VOLDIM2 = "0";}if(MMDIM3 == undefined ||  MMDIM3 === "" ||  MMDIM3 === null){MMDIM3 = "";  VOLDIM3 = "0";}
             if(MMSPE1 === undefined || MMSPE1 === null){MMSPE1 = "";}if(MMSPE2 === undefined || MMSPE2 === null){MMSPE2 = "";}if(MMSPE3 === undefined || MMSPE3 === null){MMSPE3 = "";}
             
