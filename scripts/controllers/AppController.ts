@@ -2130,9 +2130,14 @@ module h5.application {
             if(BUYE == undefined){
                  BUYE = "";
              }
-            if(MMGRWE === undefined || MMGRWE === null){MMGRWE = 0;}if(MMNEWE === undefined || MMNEWE === null){MMNEWE = 0;}
-            if(MMDIM1 === undefined ||  MMDIM1 === "" ||  MMDIM1 === null){MMDIM1 = ""; VOLDIM1 = "0";}if(MMDIM2 == undefined  ||  MMDIM2 === "" ||  MMDIM2 === null){MMDIM2 = "";  VOLDIM2 = "0";}if(MMDIM3 == undefined ||  MMDIM3 === "" ||  MMDIM3 === null){MMDIM3 = "";  VOLDIM3 = "0";}
-            if(MMSPE1 === undefined || MMSPE1 === null){MMSPE1 = "";}if(MMSPE2 === undefined || MMSPE2 === null){MMSPE2 = "";}if(MMSPE3 === undefined || MMSPE3 === null){MMSPE3 = "";}
+            if(MMGRWE === undefined || MMGRWE === null  ||  MMGRWE === ""){MMGRWE = 0;} else if(parseFloat(MMGRWE) < 0){ MMGRWE = 0;}
+            if(MMNEWE === undefined || MMNEWE === null || MMNEWE === ""){MMNEWE = 0;} else if(parseFloat(MMNEWE) < 0){ MMNEWE = 0;}
+            if(MMDIM1 === undefined || MMDIM1 === "" ||  MMDIM1 === null){MMDIM1 = ""; VOLDIM1 = "0";} else if(parseFloat(MMDIM1) < 0){ MMDIM1 = ""; VOLDIM1 = "0";}
+            if(MMDIM2 == undefined  ||  MMDIM2 === "" ||  MMDIM2 === null){MMDIM2 = "";  VOLDIM2 = "0";}else if(parseFloat(MMDIM2) < 0){MMDIM2 = "";  VOLDIM2 = "0"}
+            if(MMDIM3 == undefined ||  MMDIM3 === "" ||  MMDIM3 === null){MMDIM3 = "";  VOLDIM3 = "0";}else if(parseFloat(MMDIM3) < 0){MMDIM3 = "";  VOLDIM3 = "0";}
+            if(MMSPE1 === undefined || MMSPE1 === "" || MMSPE1 === null){MMSPE1 = "";}else if(parseFloat(MMSPE1) < 0){ MMSPE1 = "";}
+            if(MMSPE2 === undefined || MMSPE2 === "" || MMSPE2 === null){MMSPE2 = "";}else if(parseFloat(MMSPE2) < 0){ MMSPE2 = "";}
+            if(MMSPE3 === undefined || MMSPE3 === "" || MMSPE3 === null){MMSPE3 = "";}else if(parseFloat(MMSPE3) < 0){ MMSPE3 = "";}
             
             MMVOLR = parseFloat(VOLDIM1) * parseFloat(VOLDIM2) * parseFloat(VOLDIM3) ;
             console.log("G MMVOLR---"+MMVOLR);  
