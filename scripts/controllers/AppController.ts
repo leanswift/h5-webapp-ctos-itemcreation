@@ -212,6 +212,9 @@ module h5.application {
                 enableDenybutton:false,
                 enableUpdate:false,
                 enableCreate:true,
+                fragileFlag:false,
+                hazardousFlag:false,
+                notreturnFlag:false,
                 sampleData1: {},
                 sampleList1: [],
                 sampleGrid1: {},
@@ -1846,7 +1849,9 @@ module h5.application {
             
            let OVH1: any;
            let OVH2: any;  
-            
+           console.log(this.scope.interfaceItem.fragileFlag);
+           console.log(this.scope.interfaceItem.hazardousFlag);
+            console.log(this.scope.interfaceItem.notreturnFlag);
             this.scope.interfaceItem.enablebutton = false;
             let itemExists: boolean;
             let userContext = this.scope.userContext;
@@ -2153,6 +2158,13 @@ module h5.application {
 //               BUAR = "XX";
 //                }
 
+                let RNRI: any;
+                if(this.scope.interfaceItem.notreturnFlag){
+                    RNRI = "1";
+                }else{
+                    RNRI = "0";
+                }   
+
                 this.scope.loadingData = true;
                 this.scope.interfaceItem.transactionStatus.createItems = true;
                 this.scope.interfaceItem.finalITNO = "";
@@ -2167,7 +2179,7 @@ module h5.application {
                      }else{
                         CFI5 = "";   
                      }
-                    this.appService.UpdItmBasic(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmBasic(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR,RNRI).then((valUpdItmBasic: M3.IMIResponse) => {
                     this.scope.interfaceItem.finalITNO = valM3Item.item.ITNO;
                     //console.log("G FINAL ITNO---"+ this.scope.interfaceItem.finalITNO); 
                     //console.log("G FINAL valM3Item.item.CHNO---"+ valM3Item.item.CHNO); 
@@ -2241,6 +2253,16 @@ module h5.application {
                  this.showError("Error occurred while retrieving Item/Facility records for PCS260,", [err.errorMessage]);
                });
                 } 
+                if(this.scope.interfaceItem.fragileFlag){
+                    this.MMS001(userContext.CONO, userContext.DIVI, valM3Item.item.ITNO,"1");
+                }else{
+                   // this.MMS001(userContext.CONO, userContext.DIVI, valM3Item.item.ITNO,"0");
+                }
+
+                if(this.scope.interfaceItem.hazardousFlag){
+                    this.CRS212(userContext.CONO, userContext.DIVI, valM3Item.item.ITNO,"9");
+                }
+                
                              
                  if(!angular.equals("", valM3Item.item.ITNO) && !angular.equals("", OVH1) && OVH1 != undefined && (angular.equals("401", ITTY) ||  angular.equals("402", ITTY))){
                 this.scope.interfaceItem.filteredErrors =[];
@@ -2352,7 +2374,7 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
                 this.refreshTransactionStatus();
                 //this.showError("Error occurred during Item basic fields update(MMS001)", [err.errorMessage]);
                 this.reprocessItem(userContext.company,STAT,valM3Item.item.ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,
-                itemExists,ITTY,OVH1,OVH2,fromDate,SUNO,AGNB,GRPI,FVDT,PUPR,BUYE,valM3Item.item.CHNO,MMGRWE,MMNEWE,MMVOLR,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3);
+                itemExists,ITTY,OVH1,OVH2,fromDate,SUNO,AGNB,GRPI,FVDT,PUPR,BUYE,valM3Item.item.CHNO,MMGRWE,MMNEWE,MMVOLR,MMDIM1,MMDIM2,MMDIM3,MMSPE1,MMSPE2,MMSPE3,RNRI);
                });
                     }, (err: M3.IMIResponse)=> {
                 itemExists = false;
@@ -2366,7 +2388,7 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
         }
         
         private reprocessItem(company:string ,STAT: any,ITNO: any,RESP: any,UNMS: any,ITGR: any,BUAR: any,ITCL: any,ATMO: any,FUDS: any,
-        itemExists:boolean,ITTY: any,OVH1: any,OVH2: any,fromDate: any,SUNO: any,AGNB: any,GRPI: any,FVDT: any,PUPR: any,BUYE: any,CHNO: any,MMGRWE: any,MMNEWE: any,MMVOLR: any, MMDIM1: any,MMDIM2: any,MMDIM3: any,MMSPE1: any,MMSPE2: any,MMSPE3: any) {
+        itemExists:boolean,ITTY: any,OVH1: any,OVH2: any,fromDate: any,SUNO: any,AGNB: any,GRPI: any,FVDT: any,PUPR: any,BUYE: any,CHNO: any,MMGRWE: any,MMNEWE: any,MMVOLR: any, MMDIM1: any,MMDIM2: any,MMDIM3: any,MMSPE1: any,MMSPE2: any,MMSPE3: any,RNRI: any) {
                 this.scope.loadingData = true;
                 this.scope.interfaceItem.transactionStatus.createItems = true;
             let promises = [];
@@ -2378,7 +2400,7 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
                      }else{
                         CFI5 = "";   
                      }
-                    this.appService.UpdItmBasic(company,STAT,ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR).then((valUpdItmBasic: M3.IMIResponse) => {
+                    this.appService.UpdItmBasic(company,STAT,ITNO,RESP,UNMS,ITGR,BUAR,ITCL,ATMO,FUDS,valM3Item.item.CHNO,PUPR,CFI5,this.scope.interfaceItem.userInput.DCCD,MMGRWE,MMNEWE,MMVOLR,RNRI).then((valUpdItmBasic: M3.IMIResponse) => {
                     this.scope.interfaceItem.finalITNO = ITNO;
                     this.processAllOperation(ITNO,itemExists);
                     if (angular.equals("401", ITTY) ) {
@@ -2446,7 +2468,15 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
                  this.showError("Error occurred while retrieving Item/Facility records for PCS260,", [err.errorMessage]);
                });
                 } 
-                             
+
+                if(this.scope.interfaceItem.fragileFlag){
+                    this.MMS001(userContext.CONO, userContext.DIVI, ITNO,"1");
+                }else{
+                    //this.MMS001(userContext.CONO, userContext.DIVI, ITNO,"0");
+                }
+                if(this.scope.interfaceItem.hazardousFlag){
+                    this.CRS212(userContext.CONO, userContext.DIVI, valM3Item.item.ITNO,"9");
+                }             
                              
                 if(!angular.equals("", ITNO) && !angular.equals("", OVH1) && OVH1 != undefined && (angular.equals("401", ITTY) ||  angular.equals("402", ITTY))){
                 this.scope.interfaceItem.filteredErrors =[];
@@ -4949,8 +4979,110 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
            xmlhttps.setRequestHeader('Content-Type', 'text/xml');
            xmlhttps.send(strCAS380Xml);
        }
+
+       //Hazardous
+
+       private CRS212(company: any, division: any, ITNO:any,HAZC:any) {
+         let userContext = this.scope.userContext;
+         let GEnv:string = userContext.TX40.substring(0,userContext.TX40.indexOf("-")).trim();   
+         if (angular.equals("QA", GEnv)) {
+         var strXmlCRS212 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://lawson.com/ws/credentials" xmlns:add="http://your.company.net/CRS212WS/Add"> <soapenv:Header><cred:lws><!--Optional:--><cred:company>'+company+'</cred:company><!--Optional:--><cred:division>'+division+'</cred:division></cred:lws></soapenv:Header><soapenv:Body><add:Add><add:CRS212><add:HAZC>'+HAZC+'</add:HAZC><add:ITNO>'+ITNO+'</add:ITNO></add:CRS212></add:Add></soapenv:Body></soapenv:Envelope>'   
+         console.log(strXmlCRS212);
+         this.doRequestCRS212(strXmlCRS212,ITNO,HAZC);
+         }else if (angular.equals("PRD", GEnv)){
+            var strXmlCRS212 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://lawson.com/ws/credentials" xmlns:add="http://your.company.net/CRS212WS/Add"> <soapenv:Header><cred:lws><!--Optional:--><cred:company>'+company+'</cred:company><!--Optional:--><cred:division>'+division+'</cred:division></cred:lws></soapenv:Header><soapenv:Body><add:Add><add:CRS212><add:HAZC>'+HAZC+'</add:HAZC><add:ITNO>'+ITNO+'</add:ITNO></add:CRS212></add:Add></soapenv:Body></soapenv:Envelope>'   
+        this.doRequestCRS212(strXmlCRS212,ITNO,HAZC);
+         }
+     }
+     
+     
+
+     private doRequestCRS212(strXml: string, ITNO:any, HAZC:any) {
+        var __this = this;
+         var xmlhttpCRS212 = new XMLHttpRequest();
+         let userContext = this.scope.userContext;
+         let GEnv:string = userContext.TX40.substring(0,userContext.TX40.indexOf("-")).trim();   
+         // QA - https://uosqa-bel1.cloud.infor.com:63906/mws-ws/services/CRS212WS?wsdl
+         // QA - Proxy https://uosqa.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationCRS212/CRS212WS
+         if (angular.equals("QA", GEnv)) {
+            xmlhttpCRS212.open('POST', 'https://uosqa.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationCRS212/CRS212WS', true);
+         }else if (angular.equals("PRD", GEnv)){
+            xmlhttpCRS212.open('POST', 'https://uosprod.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationCRS212/CRS212WS', true);
+         
+        }
+         
+        xmlhttpCRS212.onreadystatechange = function () {
+            if (xmlhttpCRS212.readyState == 4 && xmlhttpCRS212.status == 200) {
+            }
+             if (xmlhttpCRS212.readyState == 4 ){
+             if (xmlhttpCRS212.status == 500) {
+             }
+            if (xmlhttpCRS212.status !== 200) { 
+                 let finalString: any = xmlhttpCRS212.responseText;
+                 let errorCRS212 = "CRS212 - Item "+ ITNO + "HAZC "+ HAZC + " - " + finalString.substring(finalString.indexOf("faultstring") + 12,finalString.lastIndexOf("faultstring") - 2);
+                 __this.$timeout(() => { __this.showWarning(errorCRS212,null);}, 5000);
+                 
+              }
+             }
+             
+        };
+        xmlhttpCRS212.setRequestHeader('Content-Type', 'text/xml');
+        xmlhttpCRS212.send(strXml);
+        console.log(xmlhttpCRS212);
+    }
+
+    //fragility
+
+    private MMS001(company: any, division: any, ITNO:any,FRAG:any) {
+        let userContext = this.scope.userContext;
+        let GEnv:string = userContext.TX40.substring(0,userContext.TX40.indexOf("-")).trim();   
+        if (angular.equals("QA", GEnv)) {
+        var strXmlMMS001 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://lawson.com/ws/credentials" xmlns:upd="http://your.company.net/MMS001WS/Upd"> <soapenv:Header><cred:lws><!--Optional:--><cred:company>'+company+'</cred:company><!--Optional:--><cred:division>'+division+'</cred:division></cred:lws></soapenv:Header><soapenv:Body><upd:Upd><upd:MMS001><upd:ITNO>'+ITNO+'</upd:ITNO><upd:FRAG>'+FRAG+'</upd:FRAG></upd:MMS001></upd:Upd></soapenv:Body></soapenv:Envelope>'
+        console.log(strXmlMMS001);
+        this.doRequestMMS001(strXmlMMS001,ITNO,FRAG);
+        }else if (angular.equals("PRD", GEnv)){
+        var strXmlMMS001 = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:cred="http://lawson.com/ws/credentials" xmlns:upd="http://your.company.net/MMS001WS/Upd"> <soapenv:Header><cred:lws><!--Optional:--><cred:company>'+company+'</cred:company><!--Optional:--><cred:division>'+division+'</cred:division></cred:lws></soapenv:Header><soapenv:Body><upd:Upd><upd:MMS001><upd:ITNO>'+ITNO+'</upd:ITNO><upd:FRAG>'+FRAG+'</upd:FRAG></upd:MMS001></upd:Upd></soapenv:Body></soapenv:Envelope>'
+        this.doRequestMMS001(strXmlMMS001,ITNO,FRAG);
+        }
+    }
+    
+    
+
+    private doRequestMMS001(strXmlMMS001: string, ITNO:any, FRAG:any) {
+       var __this = this;
+        var xmlhttpMMS001 = new XMLHttpRequest();
+        let userContext = this.scope.userContext;
+        let GEnv:string = userContext.TX40.substring(0,userContext.TX40.indexOf("-")).trim();   
+        // QA - https://uosqa-bel1.cloud.infor.com:63906/mws-ws/services/MMS001WS?wsdl
+        // QA PROXY END POINT - https://uosqa.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationMMS001/MMS001WS
+        if (angular.equals("QA", GEnv)) {
+            xmlhttpMMS001.open('POST', 'https://uosqa.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationMMS001/MMS001WS', true);
+        }else if (angular.equals("PRD", GEnv)){
+            xmlhttpMMS001.open('POST', 'https://uosprod.cloud.infor.com:7443/infor/CustomerApi/M3ItemCreationMMS001/MMS001WS', true);
         
-          private showerrormessage(errormssg:any,errormssges:any) {
+       }
+        
+       xmlhttpMMS001.onreadystatechange = function () {
+           if (xmlhttpMMS001.readyState == 4 && xmlhttpMMS001.status == 200) {
+           }
+            if (xmlhttpMMS001.readyState == 4 ){
+            if (xmlhttpMMS001.status == 500) {
+            }
+           if (xmlhttpMMS001.status !== 200) { 
+                let finalString: any = xmlhttpMMS001.responseText;
+                let errorMMS001 = "MMS001 - Item "+ ITNO + "FRAG "+ FRAG + " - " + finalString.substring(finalString.indexOf("faultstring") + 12,finalString.lastIndexOf("faultstring") - 2);
+                __this.$timeout(() => { __this.showWarning(errorMMS001,null);}, 5000);
+                
+             }
+            }
+            
+       };
+       xmlhttpMMS001.setRequestHeader('Content-Type', 'text/xml');
+       xmlhttpMMS001.send(strXmlMMS001);
+       console.log(xmlhttpMMS001);
+   }
+     
+      private showerrormessage(errormssg:any,errormssges:any) {
             this.showWarning("PCS260", errormssges);
             //console.log("g calling"+errormssg);
               //console.log("g calling errors"+errormssges);
@@ -5095,9 +5227,18 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
  
 
      private triggerEcomm(Ecomm:any): void {
-        console.log(Ecomm);  
+        console.log(Ecomm); 
+        if(!Ecomm){
+            this.scope.interfaceItem.fragileFlag = Ecomm;
+            this.scope.interfaceItem.hazardousFlag = Ecomm;
+            this.scope.interfaceItem.notreturnFlag = Ecomm;
+        }
+        console.log(this.scope.interfaceItem.fragileFlag); 
+        console.log(this.scope.interfaceItem.hazardousFlag); 
+        console.log(this.scope.interfaceItem.notreturnFlag); 
+
         let ITTY: any;
-                ITTY = this.scope.interfaceItem.userSelection.itemType;
+        ITTY = this.scope.interfaceItem.userSelection.itemType;
                 if (angular.equals("302", ITTY) || angular.equals("401", ITTY) || angular.equals("402", ITTY)) {
                     if (this.scope.interfaceItem.ecommFlag) { 
                         this.scope.interfaceItem.userInput.PRRF = { selected: "ECOMM" };

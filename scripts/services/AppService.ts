@@ -39,7 +39,7 @@ module h5.application {
         processM3Item(CONO: string,ITNO: string,ITTY: string, ITDS: string,ITNE: string): ng.IPromise<M3.IMIResponse>;
         getItmBasic(CONO: string,ITNO: string): ng.IPromise<M3.IMIResponse>;
         getItmRefreshCHNO(ITNO: string): ng.IPromise<M3.IMIResponse>;
-        UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any): ng.IPromise<M3.IMIResponse>;
+        UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any,RNRI: any): ng.IPromise<M3.IMIResponse>;
         UpdItmBasicDetails(CONO: string,ITNO: string, ATMO: string,DCCD: string): ng.IPromise<M3.IMIResponse>;
         UpdItmPriceDetails(CONO: string,ITNO: string, SUNO: string): ng.IPromise<M3.IMIResponse>;
         UpdItmWhs(CONO: string,WHLO: string,ITNO: string,STAT:string,SUNO: string,BUYE: string): ng.IPromise<M3.IMIResponse>;
@@ -326,7 +326,7 @@ module h5.application {
             return this.restService.executeM3MIRestService("MMS200MI", "AddItmViaItmTyp", requestData).then((val: M3.IMIResponse) => { return val; });
         }
         
-         public UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any): ng.IPromise<M3.IMIResponse>{
+         public UpdItmBasic(CONO: string,STAT: string,ITNO: string, RESP: string,UNMS: string,ITGR: string,BUAR: string,ITCL: string, ATMO: string, FUDS: string, CHNO: any,PUPR: any,CFI5: any,DCCD: string,MMGRWE: any,MMNEWE: any,MMVOLR: any,RNRI: any): ng.IPromise<M3.IMIResponse>{
             let requestData = {
                 CONO: CONO,
                 STAT: STAT,
@@ -344,7 +344,8 @@ module h5.application {
                 DCCD: DCCD,
                 GRWE: MMGRWE.toFixed(3),
                 NEWE: MMNEWE.toFixed(3),
-                VOL3: MMVOLR.toFixed(3) 
+                VOL3: MMVOLR.toFixed(3),
+                RNRI: RNRI 
             };
             return this.restService.executeM3MIRestService("MMS200MI", "UpdItmBasic", requestData).then((val: M3.IMIResponse) => { return val; });
         }

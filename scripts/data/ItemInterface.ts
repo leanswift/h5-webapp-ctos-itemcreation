@@ -113,6 +113,9 @@ module h5.application {
         defaultECOMMFromDate?: string;
         ecommFlag?: boolean;
         PTAPartFlag?: boolean;
+        fragileFlag?: boolean;
+        hazardousFlag?: boolean;
+        notreturnFlag?: boolean;
         defaultMODA?: any;
         label: string;
         chkItemType: string;
