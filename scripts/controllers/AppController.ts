@@ -1864,8 +1864,11 @@ module h5.application {
                 }
             IFIN = this.scope.interfaceItem.userInput.IFIN;
             ITNE = this.scope.interfaceItem.userInput.ITNE;
+            if (ITNE != undefined && !angular.equals("", ITNE)) {ITNE =  ITNE.toUpperCase();}
             ITDS = this.scope.interfaceItem.userInput.ITDS;
+            if (ITDS != undefined && !angular.equals("", ITDS)) {ITDS =  ITDS.toUpperCase();}
             FUDS = this.scope.interfaceItem.userInput.FUDS;
+            if (FUDS != undefined && !angular.equals("", FUDS)) {FUDS =  FUDS.toUpperCase();}
             ITTY = this.scope.interfaceItem.userSelection.itemType;
             STAT = this.scope.globalSelection.status.selected;
             PRRF = this.scope.interfaceItem.userInput.PRRF.selected;
@@ -2047,8 +2050,11 @@ module h5.application {
                 }
             IFIN = this.scope.interfaceItem.userInput.IFIN;
             ITNE = this.scope.interfaceItem.userInput.ITNE;
+            if (ITNE != undefined && !angular.equals("", ITNE)) {ITNE =  ITNE.toUpperCase();}
             ITDS = this.scope.interfaceItem.userInput.ITDS;
+            if (ITDS != undefined && !angular.equals("", ITDS)) {ITDS =  ITDS.toUpperCase();}
             FUDS = this.scope.interfaceItem.userInput.FUDS;
+            if (FUDS != undefined && !angular.equals("", FUDS)) {FUDS =  FUDS.toUpperCase();}
             ITTY = this.scope.interfaceItem.userSelection.itemType;
             STAT = this.scope.globalSelection.status.selected;
             PRRF = this.scope.interfaceItem.userInput.PRRF.selected;
@@ -2636,7 +2642,7 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
             SITE = this.scope.interfaceItem.userInput.SITE;
             UNMS = this.scope.globalSelection.uomData;
             if (SITE != undefined && !angular.equals("", SITE)) {
-                SITE =  SITE.toUpperCase( )
+                SITE =  SITE.toUpperCase();
                 }
             if (JSON.stringify(this.scope.interfaceItem.userInput.SUNO.SUNO) != undefined) {
                 SUNO = this.scope.interfaceItem.userInput.SUNO.SUNO.replace("\"","");
@@ -2644,7 +2650,9 @@ this.$q.all(promises).then((results: [M3.IMIResponse]) => {
                 SUNO = this.scope.interfaceItem.userInput.SUNO;
               }
             SITD = this.scope.interfaceItem.userInput.SITD;
+            if (SITD != undefined && !angular.equals("", SITD)) {SITD =  SITD.toUpperCase();}
             SITT = this.scope.interfaceItem.userInput.SITT;
+            if (SITT != undefined && !angular.equals("", SITT)) {SITT =  SITT.toUpperCase();}
             AGNB = this.scope.interfaceItem.userInput.AGNB;
             GRPI = "50";
             PUPR = this.scope.interfaceItem.userInput.PUPR;
